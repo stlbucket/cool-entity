@@ -1,0 +1,1 @@
+process.env.GRAPHQL_ENDPOINT = 'https://api.graph.cool/simple/v1/cj0x5xot3uwqg0102dykzky2z';

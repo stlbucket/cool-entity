@@ -6,7 +6,7 @@ const coolSchema = require('../../src/coolSchema');
 
 describe('cool schema', function () {
 
-  it.only('should get the cool schema', function (done) {
+  it('should get the cool schema', function (done) {
     this.timeout(10000);
 
     const coolSchemaOptions = {
