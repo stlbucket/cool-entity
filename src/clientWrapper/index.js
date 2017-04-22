@@ -1,4 +1,4 @@
-const coolClient = require('../../coolClient');
+const coolClient = require('../coolClient');
 
 clog = require('fbkt-clog');
 

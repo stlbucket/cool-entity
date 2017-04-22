@@ -4,6 +4,7 @@ const uuid = require('uuid');
 const expect = require('chai').expect;
 const moment = require('moment');
 const entityManager = require('./index');
+const coolClient = require('../../src').CoolClient;
 
 describe(__filename, function () {
   it('should create one thing and delete it', function (done) {
@@ -59,6 +60,22 @@ describe(__filename, function () {
         // expect(thing.jsonData.child.id).to.equal(testEntity.jsonData.child.id);
         // clog('CREATE ONE RESULT', thing);
 
+        return coolClient.query(`
+          query {
+            Thing (id: "${thing.id}") {
+              id
+              stringData
+            }
+          }
+        `, { verbose: true })
+      })
+      .then(queryResult => {
+        const thing = queryResult.Thing
+
+        expect(thing).to.be.an('object');
+        expect(thing.stringData).to.equal(testEntity.stringData);
+
+        clog('THING', thing);
         return entityManager.deleteOne(thing)
           .then(result => {
             expect(result).to.be.an('object');

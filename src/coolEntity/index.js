@@ -1,6 +1,6 @@
 const CoolRelation = require('../coolRelation');
 
-const ClientWrapper = require('./clientWrapper');
+const ClientWrapper = require('../clientWrapper');
 const CreateOne = require('./createOne');
 const DeleteOne = require('./deleteOne');
 const CreateBatch = require('./createBatch');
