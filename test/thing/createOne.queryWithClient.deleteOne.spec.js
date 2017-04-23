@@ -61,13 +61,18 @@ describe(__filename, function () {
         // clog('CREATE ONE RESULT', thing);
 
         return coolClient.query(`
-          query {
-            Thing (id: "${thing.id}") {
+          query getThing($id: ID!) {
+            Thing (id: $id) {
               id
               stringData
             }
           }
-        `, { verbose: true })
+        `, {
+          variables: {
+            id: thing.id
+          },
+          verbose: true
+        })
       })
       .then(queryResult => {
         const thing = queryResult.Thing
