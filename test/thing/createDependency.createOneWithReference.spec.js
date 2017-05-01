@@ -1,4 +1,5 @@
 'use strict';
+const R = require('ramda');
 const clog   = require('fbkt-clog');
 const uuid = require('uuid');
 const expect = require('chai').expect;
@@ -28,7 +29,7 @@ describe(__filename, function () {
       .then(otherThing => {
         clog('OTHER THING', otherThing);
 
-        const thing = Object.assign(testEntity, {
+        const thing = R.merge(testEntity, {
           otherThingId: otherThing.id
         });
 

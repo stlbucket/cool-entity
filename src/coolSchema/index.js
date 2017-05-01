@@ -7,27 +7,26 @@ if (_graphqlEndpoint === null || _graphqlEndpoint === undefined || _graphqlEndpo
   throw new Error('GRAPHQL_ENDPOINT process variable must be defined');
 }
 
-async function initializeSchema(options) {
+function initializeSchema(options) {
   clog('INITIALIZING SCHEMA', _graphqlEndpoint);
   clog('INITIALIZING SCHEMA', options);
 
-  const response = await fetch(_graphqlEndpoint, {
+  return fetch(_graphqlEndpoint, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({query: introspectionQuery}),
-  });
-
-  const {data, errors} = await response.json();
-
-  if (errors) {
-    throw new Error(JSON.stringify(errors, null, 2))
-  }
-
-  // clog('DATA', data);
-
-  return data.__schema.types.filter(type => options.useEntities.indexOf(type.name) > -1);
+  })
+    .then(response => {
+      return response.json();
+    })
+    .then(json => {
+      if (json.errors) {
+        throw new Error(JSON.stringify(errors, null, 2))
+      }
+      return json.data.__schema.types.filter(type => options.useEntities.indexOf(type.name) > -1);
+    });
 }
 
 module.exports = initializeSchema;

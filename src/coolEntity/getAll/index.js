@@ -1,4 +1,5 @@
 const Promise = require('bluebird');
+const R = require('ramda');
 const clog = require('fbkt-clog');
 const buildOutputFieldList = require('../fields/buildOutputList');
 
@@ -16,7 +17,7 @@ class GetAll {
         return this.client.query(query, this.options)
       })
       .then(result => {
-        return Object.values(result)[0];
+        return R.values(result)[0];
       })
       .catch(error => {
         clog.error(`Unable to get all ${this.entityInfo.entityNamePlural}`);

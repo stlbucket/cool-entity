@@ -1,3 +1,4 @@
+const R = require('ramda');
 const Promise = require('bluebird');
 const clog = require('fbkt-clog');
 const CoolRelation = require('../../../coolRelation');
@@ -30,7 +31,7 @@ function buildRelationOrCollectionOutputList(fieldName, type, options, parentQue
 function buildOutputList(fields, options)
 {
   const getFields = (options || {}).getFields || [];
-  const fieldsArray = Object.keys(fields).filter(field => {
+  const fieldsArray = R.keys(fields).filter(field => {
     return getFields.length > 0 ?
       getFields.indexOf(field) !== -1 :
       true;

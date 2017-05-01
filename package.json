@@ -10,7 +10,8 @@
     "lokka": "^1.7.0",
     "lokka-transport-http": "^1.6.1",
     "moment": "^2.18.1",
-    "node-fetch": "^1.6.3"
+    "node-fetch": "^1.6.3",
+    "ramda": "^0.23.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",

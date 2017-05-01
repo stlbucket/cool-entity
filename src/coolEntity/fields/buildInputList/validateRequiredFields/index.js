@@ -1,14 +1,15 @@
+const R = require('ramda');
 const clog = require('fbkt-clog');
 const Promise = require('bluebird');
 
 function validateRequiredFields(fields, entity) {
   return Promise.reduce(
-    Object.keys(fields),
+    R.keys(fields),
 
     (acc, fieldName) => {
       if ((entity[fieldName] === undefined || entity[fieldName] === null) && fields[fieldName].required === true) {
         const error = `ENTITY ${JSON.stringify(entity)}`;
-        return Object.assign(acc, {
+        return R.merge(acc, {
           [fieldName]: error
         })
       } else {

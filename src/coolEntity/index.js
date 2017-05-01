@@ -1,3 +1,4 @@
+const R = require('ramda');
 const CoolRelation = require('../coolRelation');
 
 const ClientWrapper = require('../clientWrapper');
@@ -10,11 +11,11 @@ const UpdateOrCreate = require('./updateOrCreate');
 const UpdateOrCreateBatch = require('./updateOrCreateBatch');
 
 function processEntityInfo(entityInfo){
-  const fields = Object.keys(entityInfo.fields).reduce(
+  const fields = R.keys(entityInfo.fields).reduce(
     (acc, fieldName) => {
 
       if (entityInfo.fields[fieldName].type instanceof CoolRelation) {
-        return Object.assign(acc, {
+        return R.merge(acc, {
           [fieldName]: entityInfo.fields[fieldName],
           [`${fieldName}Id`]: {
             type: 'string',
@@ -22,7 +23,7 @@ function processEntityInfo(entityInfo){
           }
         })
       } else {
-        return Object.assign(acc, {
+        return R.merge(acc, {
           [fieldName]: entityInfo.fields[fieldName]
         })
       }

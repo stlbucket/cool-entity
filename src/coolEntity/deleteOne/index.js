@@ -1,3 +1,4 @@
+const R = require('ramda');
 const Promise = require('bluebird');
 const clog      = require('fbkt-clog');
 
@@ -14,7 +15,7 @@ class DeleteOne {
         return this.client.mutate(`{${mutation}}`, this.options)
       })
       .then(result => {
-        return Object.values(result)[0];
+        return R.values(result)[0];
       })
       .catch(error => {
         clog.error(`Unable to delete ${this.entityInfo.entityName}`, {

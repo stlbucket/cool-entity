@@ -1,3 +1,4 @@
+const R = require('ramda');
 const Promise = require('bluebird');
 const clog = require('fbkt-clog');
 
@@ -16,7 +17,7 @@ class CreateBatch {
         return this.client.mutate(mutation, this.options)
       })
       .then(result => {
-        return Object.values(result);
+        return R.values(result);
       })
       .catch(error => {
         clog.error(`Unable to create ${this.entityInfo.entityName} batch`, {

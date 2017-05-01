@@ -1,4 +1,5 @@
 const Promise                = require('bluebird');
+const R = require('ramda');
 const validateRequiredFields = require('./validateRequiredFields');
 const valueWrappers          = require('./valueWrappers');
 const CoolRelation           = require('../../../coolRelation');
@@ -84,11 +85,11 @@ function buildInputList(fields, entity) {
   return validateRequiredFields(fields, entity)
     .then((errors) => {
 
-      if (Object.keys(errors).length > 0) {
+      if (R.keys(errors).length > 0) {
         throw new Error(`INVALID GRAPH COOL INPUT: ${JSON.stringify(errors)}`)
       } else {
         return Promise.reduce(
-          Object.keys(fields),
+          R.keys(fields),
           (acc, fieldName) => {
             if (entity[fieldName] !== undefined) {
               const field = fields[fieldName];

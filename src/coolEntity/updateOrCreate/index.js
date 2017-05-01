@@ -1,3 +1,4 @@
+const R = require('ramda');
 const Promise = require('bluebird')
 const clog = require('fbkt-clog');
 const buildInputFieldList  = require('../fields/buildInputList');
@@ -16,7 +17,7 @@ class UpdateOrCreate {
         return this.client.mutate(`{${mutation}}`, this.options)
       })
       .then(result => {
-        return Object.values(result)[0];
+        return R.values(result)[0];
       })
       .catch(error => {
         clog.error(`Unable to updateOrCreate ${this.entityInfo.entityName}`, {
