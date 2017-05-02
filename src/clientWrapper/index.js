@@ -12,11 +12,12 @@ class ClientWrapper {
 
     if (
       (useOptions.verbose === true ||
-      this.options.verbose === true && useOptions.verbose !== false)
+      (this.options.verbose === true && useOptions.verbose !== false))
     ) {
       clog('EXECUTING GRAPH COOL QUERY', query);
-      clog('VARIABLES', options.variables);
+      clog('QUERY OPTIONS', useOptions);
     }
+
     return coolClient.query(query, useOptions.variables)
       .then(result => {
         if (useOptions.resultKey) {
@@ -31,11 +32,13 @@ class ClientWrapper {
     const useOptions = options || {verbose: false};
 
     if (
-      (options || useOptions.verbose === true ||
-      this.options.verbose === true && useOptions.verbose !== false)
+      (useOptions.verbose === true ||
+      (this.options.verbose === true && useOptions.verbose !== false))
     ) {
       clog('EXECUTING GRAPH COOL MUTATION', mutation);
+      clog('MUTATION OPTIONS', useOptions);
     }
+
     return coolClient.mutate(mutation, useOptions.variables)
       .then(result => {
         if (useOptions.resultKey) {
