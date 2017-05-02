@@ -1,10 +1,24 @@
-const coolClient = require('../coolClient');
+const Promise = require('bluebird');
+const coolClient = require('../coolerClient');
 
 clog = require('fbkt-clog');
 
 class ClientWrapper {
   constructor(options) {
     this.options = options || {};
+  }
+
+  initClient(){
+    if (this.coolClient) {
+      return Promise.resolve(this.coolClient);
+    } else {
+      return coolClient()
+        .then(client => {
+          this.coolClient = client;
+          return this.coolClient
+        });
+    }
+
   }
 
   query(query, options) {
@@ -18,14 +32,17 @@ class ClientWrapper {
       clog('QUERY OPTIONS', useOptions);
     }
 
-    return coolClient.query(query, useOptions.variables)
-      .then(result => {
-        if (useOptions.resultKey) {
-          return result[useOptions.resultKey];
-        } else {
-          return result;
-        }
-      });
+    return this.initClient()
+      .then(coolClient => {
+        return coolClient.query(query, useOptions.variables)
+          .then(result => {
+            if (useOptions.resultKey) {
+              return result[useOptions.resultKey];
+            } else {
+              return result;
+            }
+          });
+      })
   }
 
   mutate(mutation, options) {
@@ -39,14 +56,17 @@ class ClientWrapper {
       clog('MUTATION OPTIONS', useOptions);
     }
 
-    return coolClient.mutate(mutation, useOptions.variables)
-      .then(result => {
-        if (useOptions.resultKey) {
-          return result[useOptions.resultKey];
-        } else {
-          return result;
-        }
-      });
+    return this.initClient()
+      .then(coolClient => {
+        return coolClient.mutate(mutation, useOptions.variables)
+          .then(result => {
+            if (useOptions.resultKey) {
+              return result[useOptions.resultKey];
+            } else {
+              return result;
+            }
+          });
+      })
   }
 }
 
