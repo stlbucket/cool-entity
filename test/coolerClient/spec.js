@@ -1,10 +1,11 @@
 'use strict';
 const clog = require('fbkt-clog');
+const Promise = require('bluebird');
 const expect = require('chai').expect;
 
-const target = require('../../src/coolerClient/index');
+const coolClient = require('../../index').CoolClient;
 
-describe.skip('cooler client', function () {
+describe.only('cooler client', function () {
   this.timeout(4000);
 
   const allUsersQuery = `
@@ -16,10 +17,9 @@ describe.skip('cooler client', function () {
   `;
 
   it('init client', function (done) {
-    target()
-      .then(client => {
-        clog('CLIENT', client);
-        return client.query(allUsersQuery);
+      Promise.props({
+        one: coolClient.query(allUsersQuery),
+        two: coolClient.query(allUsersQuery)
       })
       .then(result => {
         clog('FINAL RESULT', result);

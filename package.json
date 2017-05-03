@@ -1,6 +1,6 @@
 {
   "name": "cool-entity",
-  "version": "1.0.10",
+  "version": "1.0.12",
   "description": "",
   "main": "index.js",
   "dependencies": {
@@ -18,7 +18,7 @@
     "mocha": "^3.2.0"
   },
   "scripts": {
-    "test": "GRAPHQL_ENDPOINT=https://api.graph.cool/simple/v1/cj0x5xot3uwqg0102dykzky2z COOL_EMAIL=stlbucket@gmail.com COOL_PASSWORD='coolTestPa$$' mocha ./test/**/spec.js ./test/**/*.spec.js",
+    "test": "GRAPHQL_ENDPOINT=https://api.graph.cool/simple/v1/cj0x5xot3uwqg0102dykzky2z COOL_AUTH=true COOL_EMAIL=stlbucket@gmail.com COOL_PASSWORD='coolTestPa$$' mocha ./test/**/spec.js ./test/**/*.spec.js",
     "testNoAuth": "GRAPHQL_ENDPOINT=https://api.graph.cool/simple/v1/cj0x5xot3uwqg0102dykzky2z mocha ./test/**/spec.js ./test/**/*.spec.js"
   },
   "keywords": [],

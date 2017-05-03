@@ -2,7 +2,6 @@ const ClientWrapper = require('./clientWrapper');
 
 const client = new ClientWrapper();
 
-
 module.exports = {
   CoolClient: client,
   CoolEntity: require('./coolEntity'),

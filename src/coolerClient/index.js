@@ -3,6 +3,7 @@ const clog = require('fbkt-clog');
 const {Lokka}     = require('lokka')
 const {Transport} = require('lokka-transport-http')
 let _client;
+let _clientInitializer;
 
 const _graphqlEndpoint = process.env.GRAPHQL_ENDPOINT
 
@@ -10,8 +11,13 @@ if (_graphqlEndpoint === null || _graphqlEndpoint === undefined || _graphqlEndpo
   throw new Error('GRAPHQL_ENDPOINT process variable must be defined');
 }
 
+const _coolAuth = process.env.COOL_AUTH;
 const _coolEmail = process.env.COOL_EMAIL;
 const _coolPassword = process.env.COOL_PASSWORD;
+
+if (_coolAuth && (!_coolEmail || !_coolPassword)) {
+  throw new Error('COOL AUTH ENABLED WITH NO EMAIL OR PASSWORD');
+}
 
 const signinUserMutation = `($email: String!, $password: String!) {
   authenticatedUser: signinUser(email: {
@@ -23,21 +29,22 @@ const signinUserMutation = `($email: String!, $password: String!) {
 }
 `
 
-function initClient() {
-  const _initClient = new Lokka({
-    transport: new Transport(_graphqlEndpoint)
-  });
+function initAuthClient() {
+  if (_clientInitializer) {
+    return Promise.resolve(_clientInitializer);
+  } else {
+    const _initClient = new Lokka({
+      transport: new Transport(_graphqlEndpoint)
+    });
 
-  if (_client) {
-    return Promise.resolve(_client)
-  } else if (_coolEmail) {
-    return _initClient.mutate(signinUserMutation,
+    _clientInitializer = _initClient.mutate(signinUserMutation,
       {
         email: _coolEmail,
         password: _coolPassword
       }
     )
       .then(result => {
+        // console.trace('wha');
         // clog('SIGNIN RESULT', result);
 
         const token = result.authenticatedUser.token;
@@ -59,12 +66,29 @@ function initClient() {
         throw error;
       })
 
+    return Promise.resolve(_clientInitializer);
+  }
+}
+
+function initNoAuthClient() {
+  _client = new Lokka({
+    transport: new Transport(_graphqlEndpoint)
+  });
+
+  return Promise.resolve(_client);
+}
+
+function getClient() {
+
+  if (_client) {
+    return Promise.resolve(_client)
+  } else if (_coolAuth) {
+    return initAuthClient();
   } else {
     clog("NO AUTH - THAT'S NOT REALLY COOL");
-    _client = _initClient;
-    return Promise.resolve(_client)
+    return initNoAuthClient();
   }
 }
 
 
-module.exports = initClient;
+module.exports = getClient;
